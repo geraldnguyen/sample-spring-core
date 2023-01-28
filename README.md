@@ -87,3 +87,32 @@ diff --git a/src/main/java/nguyen/gerald/samples/spring/core/api/SearchControlle
      @GetMapping
 
 ```
+
+### Accepting multiple beans
+
+Branch: `git checkout dependency/multiple-beans-accepting-multiple`
+
+```
+Index: src/main/java/nguyen/gerald/samples/spring/core/api/SearchController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/nguyen/gerald/samples/spring/core/api/SearchController.java b/src/main/java/nguyen/gerald/samples/spring/core/api/SearchController.java
+--- a/src/main/java/nguyen/gerald/samples/spring/core/api/SearchController.java	(revision d58209653cc89fd17a2978f0d5dceffd5a1a3af6)
++++ b/src/main/java/nguyen/gerald/samples/spring/core/api/SearchController.java	(revision 215efb3f29f03912c0a83c7bb3307240617a5799)
+@@ -11,10 +11,10 @@
+ @RequestMapping("/search/")
+ public class SearchController {
+     @Autowired
+-    private SearchService searchService;
++    private SearchService[] searchServices;
+ 
+     @GetMapping
+     public String[] search(@RequestParam("query") String query) {
+-        return searchService.search(query);
++        return searchServices[0].search(query);
+     }
+ }
+
+```
