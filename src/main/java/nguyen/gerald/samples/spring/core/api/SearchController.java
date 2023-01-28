@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/search/")
 public class SearchController {
     @Autowired
-    private SearchService searchService;
+    private SearchService[] searchServices;
 
     @GetMapping
     public String[] search(@RequestParam("query") String query) {
-        return searchService.search(query);
+        return searchServices[0].search(query);
     }
 }
