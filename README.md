@@ -55,3 +55,35 @@ diff --git a/src/main/java/nguyen/gerald/samples/spring/core/service/search/Goog
      @Override
 
 ```
+
+### Qualifier Solution
+
+Branch: `git checkout dependency/multiple-beans-solution-qualifier`
+
+```
+Index: src/main/java/nguyen/gerald/samples/spring/core/api/SearchController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/nguyen/gerald/samples/spring/core/api/SearchController.java b/src/main/java/nguyen/gerald/samples/spring/core/api/SearchController.java
+--- a/src/main/java/nguyen/gerald/samples/spring/core/api/SearchController.java	(revision bd5d95525ddbe69ecb7061fe6dde628d2388feb5)
++++ b/src/main/java/nguyen/gerald/samples/spring/core/api/SearchController.java	(revision f3c258f9dde64ed7f06888341beb224d5ae6ffef)
+@@ -2,6 +2,7 @@
+ 
+ import nguyen.gerald.samples.spring.core.service.search.SearchService;
+ import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.beans.factory.annotation.Qualifier;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.RequestMapping;
+ import org.springframework.web.bind.annotation.RequestParam;
+@@ -11,6 +12,7 @@
+ @RequestMapping("/search/")
+ public class SearchController {
+     @Autowired
++    @Qualifier("bingSearch")
+     private SearchService searchService;
+ 
+     @GetMapping
+
+```
