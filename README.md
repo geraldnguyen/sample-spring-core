@@ -197,3 +197,95 @@ diff --git a/src/main/resources/application.properties b/src/main/resources/appl
 
 
 ```
+
+### Advanced external configuration: feature switching
+
+Branch: `git checkout dependency/multiple-beans-feature-switch`
+
+```
+Index: src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java b/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java
+--- a/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java	(revision 5736cf335e9a5d6e247283c24bd801fb6e5497a3)
++++ b/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java	(revision 19636b56bc8f529311cb3ef881c5bfb1f535a340)
+@@ -3,6 +3,7 @@
+ import nguyen.gerald.samples.spring.core.service.search.BingSearch;
+ import nguyen.gerald.samples.spring.core.service.search.GoogleSearch;
+ import nguyen.gerald.samples.spring.core.service.search.SearchService;
++import nguyen.gerald.samples.spring.core.service.search.YahooSearch;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.beans.factory.annotation.Value;
+ import org.springframework.context.annotation.Bean;
+@@ -10,20 +11,22 @@
+ 
+ @Configuration
+ public class SearchConfig {
++    enum SearchProvider { GOOGLE, BING, YAHOO }
+     @Autowired
+     private GoogleSearch googleSearch;
+ 
+     @Autowired
+     private BingSearch bingSearch;
+ 
++    @Autowired
++    private YahooSearch yahooSearch;
++
+     @Bean
+-    public SearchService searchService(@Value("${google-search.enabled:false}") boolean enableGoogleSearch) {
+-        return enableGoogleSearch ? googleSearch : bingSearch;
++    public SearchService searchService(@Value("${search.provider:BING}") SearchProvider provider) {
++        return switch (provider) {
++            case BING -> bingSearch;
++            case YAHOO -> yahooSearch;
++            default -> googleSearch;
++        };
+     }
+-
+-//    Not enough configurability
+-//    @Bean
+-//    public SearchService searchService() {
+-//        return googleSearch;
+-//    }
+ }
+Index: src/main/java/nguyen/gerald/samples/spring/core/service/search/YahooSearch.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/nguyen/gerald/samples/spring/core/service/search/YahooSearch.java b/src/main/java/nguyen/gerald/samples/spring/core/service/search/YahooSearch.java
+new file mode 100644
+--- /dev/null	(revision 19636b56bc8f529311cb3ef881c5bfb1f535a340)
++++ b/src/main/java/nguyen/gerald/samples/spring/core/service/search/YahooSearch.java	(revision 19636b56bc8f529311cb3ef881c5bfb1f535a340)
+@@ -0,0 +1,11 @@
++package nguyen.gerald.samples.spring.core.service.search;
++
++import org.springframework.stereotype.Service;
++
++@Service
++public class YahooSearch implements SearchService {
++    @Override
++    public String[] search(String query) {
++        return new String[]{ "Yahoo sample result" };
++    }
++}
+Index: src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+--- a/src/main/resources/application.properties	(revision 5736cf335e9a5d6e247283c24bd801fb6e5497a3)
++++ b/src/main/resources/application.properties	(revision 19636b56bc8f529311cb3ef881c5bfb1f535a340)
+@@ -1,2 +1,2 @@
+ 
+-google-search.enabled=true
+\ No newline at end of file
++search.provider=YAHOO
+\ No newline at end of file
+
+
+```
+
