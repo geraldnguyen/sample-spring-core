@@ -2,6 +2,7 @@ package nguyen.gerald.samples.spring.core.api;
 
 import nguyen.gerald.samples.spring.core.service.search.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/search/")
 public class SearchController {
     @Autowired
+    @Qualifier("bingSearch")
     private SearchService searchService;
 
     @GetMapping
