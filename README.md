@@ -116,3 +116,84 @@ diff --git a/src/main/java/nguyen/gerald/samples/spring/core/api/SearchControlle
  }
 
 ```
+
+### External configuration
+
+Branch: `git checkout dependency/multiple-beans-configuration`
+
+First attempt:
+
+```
+Index: src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java b/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java
+new file mode 100644
+--- /dev/null	(revision 80527ef1d1e02cd2280cc21ee3f3275e29555eb1)
++++ b/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java	(revision 80527ef1d1e02cd2280cc21ee3f3275e29555eb1)
+@@ -0,0 +1,22 @@
++package nguyen.gerald.samples.spring.core.config;
++
++import nguyen.gerald.samples.spring.core.service.search.BingSearch;
++import nguyen.gerald.samples.spring.core.service.search.GoogleSearch;
++import nguyen.gerald.samples.spring.core.service.search.SearchService;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.context.annotation.Bean;
++import org.springframework.context.annotation.Configuration;
++
++@Configuration
++public class SearchConfig {
++    @Autowired
++    private GoogleSearch googleSearch;
++
++    @Autowired
++    private BingSearch bingSearch;
++
++    @Bean
++    public SearchService searchService() {
++        return googleSearch;
++    }
++}
+
+```
+
+2nd Attempt:
+
+```
+Index: src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java b/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java
+--- a/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java	(revision caf322dc9df4e6bb0517666dc13f593fab269105)
++++ b/src/main/java/nguyen/gerald/samples/spring/core/config/SearchConfig.java	(revision b4bb0bf045d4aaefaea45751eed43a54d4dbfd7e)
+@@ -16,6 +16,11 @@
+     @Autowired
+     private BingSearch bingSearch;
+ 
++    @Bean
++    public SearchService searchService(@Value("${google-search.enabled:false}") boolean enableGoogleSearch) {
++        return enableGoogleSearch ? googleSearch : bingSearch;
++    }
++
+ //    Not enough configurability
+ //    @Bean
+ //    public SearchService searchService() {
+Index: src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+--- a/src/main/resources/application.properties	(revision caf322dc9df4e6bb0517666dc13f593fab269105)
++++ b/src/main/resources/application.properties	(revision b4bb0bf045d4aaefaea45751eed43a54d4dbfd7e)
+@@ -1,1 +1,2 @@
+ 
++google-search.enabled=true
+\ No newline at end of file
+
+
+```
