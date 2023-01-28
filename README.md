@@ -29,3 +29,29 @@ Consider marking one of the beans as @Primary, updating the consumer to accept m
 
 ```
 
+
+### @Primary solution
+
+Branch: `git checkout dependency/multiple-beans-solution-primary`
+
+```
+Index: src/main/java/nguyen/gerald/samples/spring/core/service/search/GoogleSearch.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/nguyen/gerald/samples/spring/core/service/search/GoogleSearch.java b/src/main/java/nguyen/gerald/samples/spring/core/service/search/GoogleSearch.java
+--- a/src/main/java/nguyen/gerald/samples/spring/core/service/search/GoogleSearch.java	(revision 1dec78b11d9aa88a032b64871bf42a8cbdab5c93)
++++ b/src/main/java/nguyen/gerald/samples/spring/core/service/search/GoogleSearch.java	(date 1674915907606)
+@@ -1,7 +1,9 @@
+ package nguyen.gerald.samples.spring.core.service.search;
+ 
++import org.springframework.context.annotation.Primary;
+ import org.springframework.stereotype.Service;
+ 
++@Primary
+ @Service
+ public class GoogleSearch implements SearchService {
+     @Override
+
+```
