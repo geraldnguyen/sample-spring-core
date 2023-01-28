@@ -16,6 +16,11 @@ public class SearchConfig {
     @Autowired
     private BingSearch bingSearch;
 
+    @Bean
+    public SearchService searchService(@Value("${google-search.enabled:false}") boolean enableGoogleSearch) {
+        return enableGoogleSearch ? googleSearch : bingSearch;
+    }
+
 //    Not enough configurability
 //    @Bean
 //    public SearchService searchService() {
